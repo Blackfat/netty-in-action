@@ -6,7 +6,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.blackfat.netty</groupId>
   <artifactId>netty-in-action</artifactId>
+  <packaging>pom</packaging>
   <version>1.0.0-SNAPSHOT</version>
+  <modules>
+      <module>netty-telnet</module>
+      <module>netty-common</module>
+      <module>netty-heartbeat-server</module>
+      <module>netty-heatbeat-client</module>
+  </modules>
   <name>netty-in-action</name>
 
 
@@ -29,6 +36,7 @@
     <swagger.version>2.5.0</swagger.version>
   </properties>
 
+  <dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>io.springfox</groupId>
@@ -65,7 +73,14 @@
       <artifactId>guava</artifactId>
       <version>19.0</version>
     </dependency>
+
+      <dependency>
+          <groupId>com.blackfat.netty</groupId>
+          <artifactId>netty-common</artifactId>
+          <version>${project.version}</version>
+      </dependency>
   </dependencies>
+  </dependencyManagement>
 
   <build>
     <plugins>
@@ -81,9 +96,18 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-help-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+    <plugins>
+      <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
       </plugin>
     </plugins>
+    </pluginManagement>
   </build>
 </project>

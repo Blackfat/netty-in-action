@@ -1,4 +1,4 @@
-package com.blackfat.netty.telnet;
+package com.blackfat.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -32,7 +32,14 @@ public class NettyTelnetServer {
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)   // 底层网络传输 API必须提供给应用 I/O操作的接口
                 .handler(new LoggingHandler(LogLevel.INFO)) // 监听初始化channel的各种动作
+                /*
+                * 这里的handle分为两种类型：
+                *    1：ChannelInboundHandler：用来处理客户端的消息，比如对客户端的消息进行解码，读取，该类型在pipeline中的执行顺序与添加顺序一致
+                *    2：ChannelOutboundHandler：用来处理发往客户端的消息，比如对消息进行编码和编辑，该类型在pipeline中的执行顺序与添加顺序相反
+                *    注意：ChannelOutboundHandler的所有handler，放在ChannelInboundHandler下面是执行不到的。
+                * */
                 .childHandler(new NettyTelnetInitializer());// 监听已经连接到客户端的channel的状态
+
 
         ChannelFuture future =serverBootstrap.bind(port).sync();//配置完成，绑定server，并通过sync同步方法阻塞直到绑定成功
         future.channel().closeFuture().sync();//应用程序会一直等待，直到channel关闭

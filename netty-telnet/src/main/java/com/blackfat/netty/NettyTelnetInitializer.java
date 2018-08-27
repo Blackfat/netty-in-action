@@ -1,4 +1,4 @@
-package com.blackfat.netty.telnet;
+package com.blackfat.netty;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;

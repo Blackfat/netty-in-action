@@ -1,4 +1,4 @@
-package com.blackfat.netty.telnet;
+package com.blackfat.netty;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
