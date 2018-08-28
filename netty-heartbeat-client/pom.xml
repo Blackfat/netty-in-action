@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.blackfat.netty</groupId>
-    <artifactId>netty-heatbeat-client</artifactId>
+    <artifactId>netty-heartbeat-client</artifactId>
 
     <name>netty-heatbeat-client</name>
 
