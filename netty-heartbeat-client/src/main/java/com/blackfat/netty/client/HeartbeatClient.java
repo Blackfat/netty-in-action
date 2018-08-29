@@ -1,7 +1,10 @@
 package com.blackfat.netty.client;
 
+import com.alibaba.fastjson.JSON;
+import com.blackfat.netty.common.pojo.CustomProtocol;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -43,6 +46,18 @@ public class HeartbeatClient {
             logger.info("启动 Netty 成功");
         }
         channel = (SocketChannel) future.channel();
+    }
+
+    /**
+     * 发送消息
+     *
+     * @param customProtocol
+     */
+    public void sendMsg(CustomProtocol customProtocol) {
+        ChannelFuture future = channel.writeAndFlush(customProtocol);
+        future.addListener((ChannelFutureListener) channelFuture ->
+                logger.info("客户端手动发消息成功={}", JSON.toJSONString(customProtocol)));
+
     }
 
 }

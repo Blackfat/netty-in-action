@@ -74,6 +74,14 @@
       <version>19.0</version>
     </dependency>
 
+    <!-- lombok -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.16.16</version>
+      <scope>provided</scope>
+    </dependency>
+
       <dependency>
           <groupId>com.blackfat.netty</groupId>
           <artifactId>netty-common</artifactId>
