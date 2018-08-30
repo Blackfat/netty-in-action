@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * @desc
  * @create 2018/8/28-14:36
  */
-public class HeartBeatSimpleHandle extends SimpleChannelInboundHandler<CustomProtocol>   {
+public class HeartBeatSimpleHandle extends SimpleChannelInboundHandler<String>   {
 
     private final static Logger logger = LoggerFactory.getLogger(HeartBeatSimpleHandle.class);
 
@@ -27,13 +27,18 @@ public class HeartBeatSimpleHandle extends SimpleChannelInboundHandler<CustomPro
             (new CustomProtocol(123456L,"pong").toString(), CharsetUtil.UTF_8));
 
 
-    @Override
-    protected void channelRead0(ChannelHandlerContext ctx, CustomProtocol customProtocol) throws Exception {
-        logger.info("收到customProtocol={}", customProtocol);
-        //保存客户端与 Channel 之间的关系
-        NettySocketHolder.put(customProtocol.getId(),(NioSocketChannel)ctx.channel()) ;
-    }
+//    @Override
+//    protected void channelRead0(ChannelHandlerContext ctx, CustomProtocol customProtocol) throws Exception {
+//        logger.info("收到customProtocol={}", customProtocol);
+//        //保存客户端与 Channel 之间的关系
+//        NettySocketHolder.put(customProtocol.getId(),(NioSocketChannel)ctx.channel()) ;
+//    }
 
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext channelHandlerContext, String msg) throws Exception {
+        logger.info("收到msg={}", msg);
+    }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {

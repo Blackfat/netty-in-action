@@ -35,4 +35,15 @@ public class IndexController
         sendMsgResVO.setMsg("OK") ;
         return BaseResult.succeed(sendMsgResVO);
     }
+
+    @ApiOperation("客户端发送字符串消息")
+    @RequestMapping(value = "sendStringMsg",method = RequestMethod.POST)
+    public BaseResult<SendMsgResVO> sendStringMsg(@RequestBody SendMsgReqVO sendMsgReqVO){
+        for (int i = 0; i < 100; i++) {
+            heartbeatClient.sendStringMsg(sendMsgReqVO.getMsg()) ;
+        }
+        SendMsgResVO sendMsgResVO = new SendMsgResVO() ;
+        sendMsgResVO.setMsg("OK") ;
+        return BaseResult.succeed(sendMsgResVO);
+    }
 }

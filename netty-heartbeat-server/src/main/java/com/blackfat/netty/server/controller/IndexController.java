@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,7 +26,7 @@ public class IndexController
 
 
     @ApiOperation("服务端发送消息")
-    @RequestMapping("sendMsg")
+    @RequestMapping(value = "sendMsg",method = RequestMethod.POST)
     public BaseResult<SendMsgResVO> sendMsg(@RequestBody SendMsgReqVO sendMsgReqVO){
         heartbeatClient.sendMsg(new CustomProtocol(sendMsgReqVO.getId(),sendMsgReqVO.getMsg())) ;
         SendMsgResVO sendMsgResVO = new SendMsgResVO() ;
