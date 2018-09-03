@@ -13,6 +13,7 @@
       <module>netty-common</module>
       <module>netty-heartbeat-server</module>
       <module>netty-heartbeat-client</module>
+      <module>netty-http</module>
   </modules>
   <name>netty-in-action</name>
 
