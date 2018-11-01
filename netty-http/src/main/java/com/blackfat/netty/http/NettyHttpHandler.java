@@ -9,6 +9,8 @@ import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.URLDecoder;
+
 /**
  * @author wangfeiyang
  * @desc
@@ -29,7 +31,7 @@ public class NettyHttpHandler extends ChannelInboundHandlerAdapter {
             String uri = request.uri();
             logger.info("uri=[{}]", uri);
 
-           // QueryStringDecoder queryStringDecoder = new QueryStringDecoder(URLDecoder.decode(request.uri(), "utf-8"));
+            QueryStringDecoder queryStringDecoder = new QueryStringDecoder(URLDecoder.decode(request.uri(), "utf-8"));
 
 
             responseMsg(ctx);
@@ -49,6 +51,7 @@ public class NettyHttpHandler extends ChannelInboundHandlerAdapter {
     private void responseMsg(ChannelHandlerContext ctx) {
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer("hello world", CharsetUtil.UTF_8));
         buildHeader(response);
+        // 操作完成关闭连接
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
     }
 
