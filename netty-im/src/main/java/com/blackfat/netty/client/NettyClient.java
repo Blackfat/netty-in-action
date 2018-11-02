@@ -4,6 +4,7 @@ import com.blackfat.netty.client.handler.LoginResponseHandler;
 import com.blackfat.netty.client.handler.MessageResponseHandler;
 import com.blackfat.netty.codec.PacketDecoder;
 import com.blackfat.netty.codec.PacketEncoder;
+import com.blackfat.netty.codec.Spliter;
 import com.blackfat.netty.protocol.MessageRequestPacket;
 import com.blackfat.netty.protocol.PacketCodeC;
 import com.blackfat.netty.util.LoginUtil;
@@ -45,6 +46,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder())
                                 .addLast(new LoginResponseHandler())
                                 .addLast(new MessageResponseHandler())
