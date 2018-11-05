@@ -2,11 +2,14 @@ package com.blackfat.netty.server.handler;
 
 import com.blackfat.netty.protocol.LoginRequestPacket;
 import com.blackfat.netty.protocol.LoginResponsePacket;
+import com.blackfat.netty.session.Session;
 import com.blackfat.netty.util.LoginUtil;
+import com.blackfat.netty.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author wangfeiyang
@@ -22,14 +25,19 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
         LoginResponsePacket loginResponsePacket = new LoginResponsePacket();
         loginResponsePacket.setVersion(loginRequestPacket.getVersion());
+        loginResponsePacket.setUserName(loginRequestPacket.getUserName());
+
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
-            System.out.println(new Date() + ": 登录成功!");
-            LoginUtil.markAsLogin(ctx.channel());
+            String userId = randomUserId();
+            loginResponsePacket.setUserId(userId);
+            System.out.println(loginRequestPacket.getUserName() + ": 登录成功!");
+            System.out.println("server channel:" + ctx.channel().toString());
+            SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUserName()),ctx.channel());
         } else {
             loginResponsePacket.setReason("账号密码校验失败");
             loginResponsePacket.setSuccess(false);
-            System.out.println(new Date() + ": 登录失败!");
+            System.out.println(loginRequestPacket.getUserName() + ": 登录失败!");
         }
 
         // 登录响应
@@ -39,5 +47,15 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
     private boolean valid(LoginRequestPacket loginRequestPacket) {
         return true;
+    }
+
+
+    private static String randomUserId() {
+        return UUID.randomUUID().toString().split("-")[0];
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        SessionUtil.unBindSession(ctx.channel());
     }
 }

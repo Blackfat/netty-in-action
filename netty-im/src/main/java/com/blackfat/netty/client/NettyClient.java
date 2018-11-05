@@ -5,9 +5,11 @@ import com.blackfat.netty.client.handler.MessageResponseHandler;
 import com.blackfat.netty.codec.PacketDecoder;
 import com.blackfat.netty.codec.PacketEncoder;
 import com.blackfat.netty.codec.Spliter;
+import com.blackfat.netty.protocol.LoginRequestPacket;
 import com.blackfat.netty.protocol.MessageRequestPacket;
 import com.blackfat.netty.protocol.PacketCodeC;
 import com.blackfat.netty.util.LoginUtil;
+import com.blackfat.netty.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -81,21 +83,37 @@ public class NettyClient {
 
 
     private static void startConsoleThread(Channel channel){
-        new Thread(() ->{
-            while(!Thread.interrupted()){
-                if (LoginUtil.hasLogin(channel)) {
-                    System.out.println("输入消息发送至服务端: ");
+        Scanner sc = new Scanner(System.in);
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
 
-                    Scanner sc = new Scanner(System.in);
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (!SessionUtil.hasLogin(channel)) {
+                    System.err.println("client channel:" + channel.toString());
+                    System.out.print("输入用户名登录: ");
+                    String username = sc.nextLine();
+                    loginRequestPacket.setUserName(username);
 
-                    String line = sc.nextLine();
+                    // 密码使用默认的
+                    loginRequestPacket.setPassword("pwd");
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    channel.writeAndFlush(packet);
+                    // 发送登录数据包
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                } else {
+                    String toUserId = sc.next();
+                    String message = sc.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
                 }
             }
         }).start();
 
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }
