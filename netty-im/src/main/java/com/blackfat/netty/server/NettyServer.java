@@ -3,6 +3,7 @@ package com.blackfat.netty.server;
 import com.blackfat.netty.codec.PacketDecoder;
 import com.blackfat.netty.codec.PacketEncoder;
 import com.blackfat.netty.codec.Spliter;
+import com.blackfat.netty.server.handler.AuthHandler;
 import com.blackfat.netty.server.handler.LoginRequestHandler;
 import com.blackfat.netty.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -41,6 +42,7 @@ public class NettyServer {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder())
                                 .addLast(new LoginRequestHandler())
+                                .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
                                 .addLast(new PacketEncoder());
                     }
