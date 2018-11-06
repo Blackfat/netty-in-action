@@ -3,6 +3,7 @@ package com.blackfat.netty.server.handler;
 import com.blackfat.netty.protocol.LoginRequestPacket;
 import com.blackfat.netty.protocol.LoginResponsePacket;
 import com.blackfat.netty.session.Session;
+import com.blackfat.netty.util.IDUtil;
 import com.blackfat.netty.util.LoginUtil;
 import com.blackfat.netty.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
@@ -29,10 +30,10 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
         if (valid(loginRequestPacket)) {
             loginResponsePacket.setSuccess(true);
-            String userId = randomUserId();
+            String userId = IDUtil.randomId();
             loginResponsePacket.setUserId(userId);
             System.out.println(loginRequestPacket.getUserName() + ": 登录成功!");
-            System.out.println("server channel:" + ctx.channel().toString());
+           // System.out.println("server channel:" + ctx.channel().toString());
             SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUserName()),ctx.channel());
         } else {
             loginResponsePacket.setReason("账号密码校验失败");
@@ -49,10 +50,6 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         return true;
     }
 
-
-    private static String randomUserId() {
-        return UUID.randomUUID().toString().split("-")[0];
-    }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {

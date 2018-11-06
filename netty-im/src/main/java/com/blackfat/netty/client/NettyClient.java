@@ -1,6 +1,10 @@
 package com.blackfat.netty.client;
 
+import com.blackfat.netty.client.console.ConsoleCommandManager;
+import com.blackfat.netty.client.console.LoginConsoleCommand;
+import com.blackfat.netty.client.handler.CreateGroupResponseHandler;
 import com.blackfat.netty.client.handler.LoginResponseHandler;
+import com.blackfat.netty.client.handler.LogoutResponseHandler;
 import com.blackfat.netty.client.handler.MessageResponseHandler;
 import com.blackfat.netty.codec.PacketDecoder;
 import com.blackfat.netty.codec.PacketEncoder;
@@ -51,7 +55,9 @@ public class NettyClient {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder())
                                 .addLast(new LoginResponseHandler())
+                                .addLast(new LogoutResponseHandler())
                                 .addLast(new MessageResponseHandler())
+                                .addLast(new CreateGroupResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });
@@ -83,37 +89,20 @@ public class NettyClient {
 
 
     private static void startConsoleThread(Channel channel){
-        Scanner sc = new Scanner(System.in);
-        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+        ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+        LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
+        Scanner scanner = new Scanner(System.in);
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 if (!SessionUtil.hasLogin(channel)) {
-                    System.err.println("client channel:" + channel.toString());
-                    System.out.print("输入用户名登录: ");
-                    String username = sc.nextLine();
-                    loginRequestPacket.setUserName(username);
-
-                    // 密码使用默认的
-                    loginRequestPacket.setPassword("pwd");
-
-                    // 发送登录数据包
-                    channel.writeAndFlush(loginRequestPacket);
-                    waitForLoginResponse();
+                    loginConsoleCommand.exec(scanner, channel);
                 } else {
-                    String toUserId = sc.next();
-                    String message = sc.next();
-                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                    consoleCommandManager.exec(scanner, channel);
                 }
             }
         }).start();
 
     }
 
-    private static void waitForLoginResponse() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ignored) {
-        }
-    }
 }

@@ -3,9 +3,7 @@ package com.blackfat.netty.server;
 import com.blackfat.netty.codec.PacketDecoder;
 import com.blackfat.netty.codec.PacketEncoder;
 import com.blackfat.netty.codec.Spliter;
-import com.blackfat.netty.server.handler.AuthHandler;
-import com.blackfat.netty.server.handler.LoginRequestHandler;
-import com.blackfat.netty.server.handler.MessageRequestHandler;
+import com.blackfat.netty.server.handler.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -44,6 +42,8 @@ public class NettyServer {
                                 .addLast(new LoginRequestHandler())
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
+                                .addLast(new CreateGroupRequestHandler())
+                                .addLast(new LogoutRequestHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });
