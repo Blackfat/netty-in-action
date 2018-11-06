@@ -2,10 +2,7 @@ package com.blackfat.netty.client;
 
 import com.blackfat.netty.client.console.ConsoleCommandManager;
 import com.blackfat.netty.client.console.LoginConsoleCommand;
-import com.blackfat.netty.client.handler.CreateGroupResponseHandler;
-import com.blackfat.netty.client.handler.LoginResponseHandler;
-import com.blackfat.netty.client.handler.LogoutResponseHandler;
-import com.blackfat.netty.client.handler.MessageResponseHandler;
+import com.blackfat.netty.client.handler.*;
 import com.blackfat.netty.codec.PacketDecoder;
 import com.blackfat.netty.codec.PacketEncoder;
 import com.blackfat.netty.codec.Spliter;
@@ -58,6 +55,7 @@ public class NettyClient {
                                 .addLast(new LogoutResponseHandler())
                                 .addLast(new MessageResponseHandler())
                                 .addLast(new CreateGroupResponseHandler())
+                                .addLast(new GroupMessageResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });

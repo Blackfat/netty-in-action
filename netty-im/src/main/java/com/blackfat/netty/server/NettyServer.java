@@ -43,6 +43,7 @@ public class NettyServer {
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
                                 .addLast(new CreateGroupRequestHandler())
+                                .addLast(new GroupMessageRequestHandler())
                                 .addLast(new LogoutRequestHandler())
                                 .addLast(new PacketEncoder());
                     }
