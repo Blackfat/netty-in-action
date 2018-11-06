@@ -6,6 +6,7 @@ import com.blackfat.netty.session.Session;
 import com.blackfat.netty.util.IDUtil;
 import com.blackfat.netty.util.LoginUtil;
 import com.blackfat.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -17,7 +18,15 @@ import java.util.UUID;
  * @desc   登录逻辑
  * @create 2018/11/2-10:04
  */
+// 表示该handler可以多个channel共享，是无状态的handler
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+
+    public static final LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    protected LoginRequestHandler() {
+    }
 
 
     @Override
@@ -33,7 +42,6 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             String userId = IDUtil.randomId();
             loginResponsePacket.setUserId(userId);
             System.out.println(loginRequestPacket.getUserName() + ": 登录成功!");
-           // System.out.println("server channel:" + ctx.channel().toString());
             SessionUtil.bindSession(new Session(userId, loginRequestPacket.getUserName()),ctx.channel());
         } else {
             loginResponsePacket.setReason("账号密码校验失败");

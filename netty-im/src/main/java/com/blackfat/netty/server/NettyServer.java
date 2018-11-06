@@ -39,7 +39,7 @@ public class NettyServer {
                     protected void initChannel(NioSocketChannel ch) {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder())
-                                .addLast(new LoginRequestHandler())
+                                .addLast(LoginRequestHandler.INSTANCE)
                                 .addLast(new AuthHandler())
                                 .addLast(new MessageRequestHandler())
                                 .addLast(new CreateGroupRequestHandler())
