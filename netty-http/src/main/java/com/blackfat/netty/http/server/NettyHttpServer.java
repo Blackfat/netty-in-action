@@ -1,5 +1,6 @@
-package com.blackfat.netty.http;
+package com.blackfat.netty.http.server;
 
+import com.blackfat.netty.http.config.WebConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
@@ -27,9 +28,14 @@ public class NettyHttpServer {
 
     private EventLoopGroup workerGroup = new NioEventLoopGroup(); // 处理客户端读写操作
 
-    public void open() throws InterruptedException {
+    public void open(Class<?> clazz,String path) throws InterruptedException {
         try{
             long start = System.currentTimeMillis();
+
+
+            //init application
+            WebConfig.INSTANCE.setRootPackageName(clazz.getPackage().getName());
+            WebConfig.INSTANCE.setRootPath(path);
 
             serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workerGroup)
@@ -50,15 +56,5 @@ public class NettyHttpServer {
             workerGroup.shutdownGracefully();
         }
 
-    }
-
-    public static void main(String[] args) {
-        NettyHttpServer server = new NettyHttpServer();
-
-        try {
-            server.open();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

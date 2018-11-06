@@ -1,5 +1,6 @@
-package com.blackfat.netty.http;
+package com.blackfat.netty.http.server;
 
+import com.blackfat.netty.http.server.NettyHttpHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.handler.codec.http.HttpRequestDecoder;
