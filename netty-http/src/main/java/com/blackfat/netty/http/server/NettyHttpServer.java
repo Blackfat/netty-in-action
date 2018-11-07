@@ -18,17 +18,13 @@ public class NettyHttpServer {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyHttpServer.class);
 
-    private static final int port = 8080;
-
     private static final int BOSS_SIZE = Runtime.getRuntime().availableProcessors() * 2;
 
-    private ServerBootstrap serverBootstrap;
+    private static EventLoopGroup bossGroup = new NioEventLoopGroup(BOSS_SIZE);  // 接受客户端请求
 
-    private EventLoopGroup bossGroup = new NioEventLoopGroup(BOSS_SIZE);  // 接受客户端请求
+    private static EventLoopGroup workerGroup = new NioEventLoopGroup(); // 处理客户端读写操作
 
-    private EventLoopGroup workerGroup = new NioEventLoopGroup(); // 处理客户端读写操作
-
-    public void open(Class<?> clazz,String path) throws InterruptedException {
+    public static void start(Class<?> clazz,String path) throws InterruptedException {
         try{
             long start = System.currentTimeMillis();
 
@@ -37,7 +33,8 @@ public class NettyHttpServer {
             WebConfig.INSTANCE.setRootPackageName(clazz.getPackage().getName());
             WebConfig.INSTANCE.setRootPath(path);
 
-            serverBootstrap = new ServerBootstrap();
+            int port = WebConfig.INSTANCE.getPort();
+            ServerBootstrap  serverBootstrap = new ServerBootstrap();
             serverBootstrap.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(new NettyHttpInitializer());

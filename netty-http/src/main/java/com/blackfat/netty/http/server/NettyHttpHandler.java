@@ -10,6 +10,7 @@ import com.blackfat.netty.http.enums.StatusEnum;
 import com.blackfat.netty.http.exception.CicadaException;
 import com.blackfat.netty.http.util.ClassScanner;
 import com.blackfat.netty.http.util.PathUtil;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -144,7 +145,9 @@ public class NettyHttpHandler extends ChannelInboundHandlerAdapter {
      * @param ctx
      */
     private void responseMsg(ChannelHandlerContext ctx, WorkRes execute) {
-        DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, Unpooled.copiedBuffer(JSON.toJSONString(execute), CharsetUtil.UTF_8));
+        ByteBuf byteBuf = Unpooled.copiedBuffer(JSON.toJSONString(execute), CharsetUtil.UTF_8);
+        logger.error("Unpooled.copiedBuffer:"+byteBuf.isDirect());
+        DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, byteBuf);
         buildHeader(response);
         // 操作完成关闭连接
         ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
