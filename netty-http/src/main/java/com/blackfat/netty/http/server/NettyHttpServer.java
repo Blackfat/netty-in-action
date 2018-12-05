@@ -49,8 +49,28 @@ public class NettyHttpServer {
             future.channel().closeFuture().sync();//应用程序会一直等待，直到channel关闭
 
         }finally {
+            // 使用hook优雅的关闭
+            // 在使用kill -9 pid是不会JVM注册的钩子不会被调用
+           shutDownServer();
+        }
+
+    }
+
+    private static void shutDownServer(){
+        ShutDownThread shutDownThread = new ShutDownThread();
+        shutDownThread.setName("server-shutDown");
+        Runtime.getRuntime().addShutdownHook(shutDownThread);
+    }
+
+    private static class ShutDownThread extends Thread {
+        @Override
+        public void run() {
+            logger.info("server stop...");
+
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
+
+            logger.info("server has been successfully stopped.");
         }
 
     }
