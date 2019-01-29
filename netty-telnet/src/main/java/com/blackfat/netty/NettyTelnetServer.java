@@ -36,7 +36,6 @@ public class NettyTelnetServer {
                 * 这里的handle分为两种类型：
                 *    1：ChannelInboundHandler：用来处理客户端的消息，比如对客户端的消息进行解码，读取，该类型在pipeline中的执行顺序与添加顺序一致
                 *    2：ChannelOutboundHandler：用来处理发往客户端的消息，比如对消息进行编码和编辑，该类型在pipeline中的执行顺序与添加顺序相反
-                *    注意：ChannelOutboundHandler的所有handler，放在ChannelInboundHandler下面是执行不到的。
                 * */
                 .childHandler(new NettyTelnetInitializer());// 监听已经连接到客户端的channel的状态
 
