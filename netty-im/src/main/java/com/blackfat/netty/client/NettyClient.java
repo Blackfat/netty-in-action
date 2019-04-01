@@ -51,11 +51,11 @@ public class NettyClient {
                     public void initChannel(SocketChannel ch) {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder())
-                                .addLast(new LoginResponseHandler())
-                                .addLast(new LogoutResponseHandler())
-                                .addLast(new MessageResponseHandler())
-                                .addLast(new CreateGroupResponseHandler())
-                                .addLast(new GroupMessageResponseHandler())
+                                .addLast(LoginResponseHandler.INSTANCE)
+                                .addLast(LogoutResponseHandler.INSTANCE)
+                                .addLast(MessageResponseHandler.INSTANCE)
+                                .addLast(CreateGroupResponseHandler.INSTANCE)
+                                .addLast(GroupMessageResponseHandler.INSTANCE)
                                 .addLast(new PacketEncoder());
                     }
                 });

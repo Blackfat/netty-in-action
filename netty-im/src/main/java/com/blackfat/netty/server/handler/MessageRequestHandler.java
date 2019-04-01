@@ -5,6 +5,7 @@ import com.blackfat.netty.protocol.MessageResponsePacket;
 import com.blackfat.netty.session.Session;
 import com.blackfat.netty.util.SessionUtil;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -15,7 +16,15 @@ import java.util.Date;
  * @desc   消息处理逻辑
  * @create 2018/11/2-10:07
  */
+@ChannelHandler.Sharable
 public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRequestPacket> {
+
+    public static final MessageRequestHandler INSTANCE = new MessageRequestHandler();
+
+    private MessageRequestHandler(){
+
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageRequestPacket messageRequestPacket) throws Exception {
          // 1.拿到消息发送方的会话

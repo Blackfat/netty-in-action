@@ -23,6 +23,7 @@ public class HeartBeatSimpleHandle extends SimpleChannelInboundHandler<String>  
 
     private final static Logger logger = LoggerFactory.getLogger(HeartBeatSimpleHandle.class);
 
+    // Unpooled提供静态方法创建ByteBuf
     private static final ByteBuf HEART_BEAT =  Unpooled.unreleasableBuffer(Unpooled.copiedBuffer
             (new CustomProtocol(123456L,"pong").toString(), CharsetUtil.UTF_8));
 

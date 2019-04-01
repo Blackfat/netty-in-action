@@ -42,11 +42,11 @@ public class NettyServer {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder())
                                 .addLast(LoginRequestHandler.INSTANCE)
-                                .addLast(new AuthHandler())
-                                .addLast(new MessageRequestHandler())
-                                .addLast(new CreateGroupRequestHandler())
-                                .addLast(new GroupMessageRequestHandler())
-                                .addLast(new LogoutRequestHandler())
+                                .addLast(AuthHandler.INSTANCE)
+                                .addLast(MessageRequestHandler.INSTANCE)
+                                .addLast(CreateGroupRequestHandler.INSTANCE)
+                                .addLast(GroupMessageRequestHandler.INSTANCE)
+                                .addLast(LogoutRequestHandler.INSTANCE)
                                 .addLast(new PacketEncoder());
                     }
                 });

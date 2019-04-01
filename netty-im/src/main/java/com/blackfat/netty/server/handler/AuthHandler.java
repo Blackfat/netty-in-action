@@ -2,6 +2,7 @@ package com.blackfat.netty.server.handler;
 
 import com.blackfat.netty.util.LoginUtil;
 import com.blackfat.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import sun.rmi.runtime.Log;
@@ -11,7 +12,15 @@ import sun.rmi.runtime.Log;
  * @desc 身份校验
  * @create 2018/11/5-9:29
  */
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
+
+    public static final AuthHandler INSTANCE = new AuthHandler();
+
+    private AuthHandler(){
+
+    }
+
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

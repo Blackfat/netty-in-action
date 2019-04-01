@@ -3,6 +3,7 @@ package com.blackfat.netty.server.handler;
 import com.blackfat.netty.protocol.GroupMessageRequestPacket;
 import com.blackfat.netty.protocol.GroupMessageResponsePacket;
 import com.blackfat.netty.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -12,7 +13,16 @@ import io.netty.channel.group.ChannelGroup;
  * @desc
  * @create 2018/11/6-13:32
  */
+@ChannelHandler.Sharable
 public class GroupMessageRequestHandler extends SimpleChannelInboundHandler<GroupMessageRequestPacket>  {
+
+
+    public static final GroupMessageRequestHandler INSTANCE = new GroupMessageRequestHandler();
+
+    private GroupMessageRequestHandler(){
+
+    }
+
 
 
     @Override
