@@ -31,6 +31,9 @@ public class NettyServer {
         serverBootstrap
                 .group(bossGroup, workGroup)
                 .channel(NioServerSocketChannel.class)
+                /*
+                * option主要是针对boss线程组，child主要是针对worker线程组
+                * */
                 // 临时存放已完成三次握手的请求的队列的最大长度
                 .option(ChannelOption.SO_BACKLOG, 1024)
                 // 是否开启TCP底层心跳机制

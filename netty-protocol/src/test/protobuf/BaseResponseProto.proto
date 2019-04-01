@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package protocol;
+
+option java_package = "com.blackfat.netty.protobuf";
+option java_outer_classname = "BaseResponseProto";
+
+message ResponseProtocol {
+  required int32 responseId = 2;
+  required string resMsg = 1;
+
+}
